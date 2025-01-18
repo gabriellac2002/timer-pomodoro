@@ -60,3 +60,28 @@ export const HistoryList = styled.div`
     }
   }
 `;
+
+const STATUS_COLORS = {
+  yellow: "yellow-500",
+  green: "green-500",
+  red: "red-500",
+};
+
+interface StatusProps {
+  statusColor: "yellow" | "green" | "red";
+}
+
+export const Status = styled.span<StatusProps>`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: ${(props) =>
+      props.theme[STATUS_COLORS[props.statusColor]]};
+  }
+`;
