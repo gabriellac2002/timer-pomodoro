@@ -40,9 +40,22 @@ export const HistoryList = styled.div`
         border-top-right-radius: 8px;
         padding-right: 1.5rem;
       }
+    }
 
-      td {
-        background-color: ${(props) => props.theme["gray-700"]};
+    td {
+      background-color: ${(props) => props.theme["gray-700"]};
+      border-top: 4px solid ${(props) => props.theme["gray-800"]};
+      padding: 1rem;
+      font-size: 0.875rem;
+      line-height: 1.6;
+
+      &:first-child {
+        padding-left: 1.5rem;
+        width: 50%;
+      }
+
+      &:last-child {
+        padding-right: 1.5rem;
       }
     }
   }
