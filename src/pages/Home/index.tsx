@@ -8,8 +8,33 @@ import {
   StartCountdownButton,
   TaskInput,
 } from "./styles";
+import { useState } from "react";
+
+// controled form -> quando o usuario digita algo, o valor é armazenado no estado em tempo real
+// uncontroled form -> quando o usuario digita algo, o valor é armazenado no estado apenas quando o formulario é submetido
+
+/*
+ * Controlled Form:
+ * - Vantagens:
+ *   - O estado do formulário é mantido em sincronia com o estado do componente React.
+ *   - Facilita a validação em tempo real e o gerenciamento de formulários complexos.
+ *   - Permite manipulação e controle total sobre os dados do formulário.
+ * - Desvantagens:
+ *   - Pode ser mais verboso e exigir mais código para configurar.
+ *   - Pode impactar a performance em formulários muito grandes devido a atualizações frequentes de estado.
+ *
+ * Uncontrolled Form:
+ * - Vantagens:
+ *   - Menos código e mais simples de configurar.
+ *   - Melhor performance em formulários grandes, pois o estado não é atualizado em tempo real.
+ * - Desvantagens:
+ *   - Menos controle sobre os dados do formulário.
+ *   - Validação e manipulação de dados podem ser mais difíceis.
+ *   - Não é ideal para formulários complexos que requerem validação em tempo real.
+ */
 
 export function Home() {
+  const [task, setTask] = useState("");
   return (
     <HomeContainer>
       <form>
@@ -20,6 +45,8 @@ export function Home() {
             type="text"
             list="tasks-suggestions"
             placeholder="Dê um nome para o seu projeto"
+            onChange={(event) => setTask(event.target.value)}
+            value={task}
           />
 
           <datalist id="tasks-suggestions">
@@ -50,7 +77,7 @@ export function Home() {
           <span>0</span>
         </CountdownContainer>
 
-        <StartCountdownButton disabled type="submit">
+        <StartCountdownButton disabled={!task} type="submit">
           <Play size={24} /> Começar
         </StartCountdownButton>
       </form>
