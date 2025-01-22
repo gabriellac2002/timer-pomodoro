@@ -12,8 +12,9 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as zod from "zod";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Cycle } from "../../@types/types";
+import { differenceInSeconds } from "date-fns";
 
 // controled form -> quando o usuario digita algo, o valor é armazenado no estado em tempo real
 // uncontroled form -> quando o usuario digita algo, o valor é armazenado no estado apenas quando o formulario é submetido
@@ -62,6 +63,7 @@ export function Home() {
       id: String(new Date().getTime()),
       task: data.task,
       minutesAmount: data.minutesAmount,
+      startDate: new Date(),
     };
 
     setCycles((state) => [...state, newCycle]);
@@ -82,6 +84,16 @@ export function Home() {
 
   const task = watch("task");
   const isSubmitDisabled = !task;
+
+  useEffect(() => {
+    if (activeCycle) {
+      setInterval(() => {
+        setAmountSecondsPassed(
+          differenceInSeconds(new Date(), activeCycle!.startDate)
+        );
+      }, 1000);
+    }
+  }, [activeCycle]);
 
   return (
     <HomeContainer>
