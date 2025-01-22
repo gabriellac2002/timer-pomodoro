@@ -10,6 +10,8 @@ import {
 } from "./styles";
 
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as zod from "zod";
 
 // controled form -> quando o usuario digita algo, o valor é armazenado no estado em tempo real
 // uncontroled form -> quando o usuario digita algo, o valor é armazenado no estado apenas quando o formulario é submetido
@@ -34,10 +36,23 @@ import { useForm } from "react-hook-form";
  *   - Não é ideal para formulários complexos que requerem validação em tempo real.
  */
 
-export function Home() {
-  const { register, handleSubmit, watch } = useForm();
+type NewCicleFormData = zod.infer<typeof newCicleFormValidationSchema>;
 
-  function handleCreateNewCicle(data: any) {
+const newCicleFormValidationSchema = zod.object({
+  task: zod.string().nonempty("Digite um nome para o projeto"),
+  minutesAmount: zod.number().int().min(5, "O tempo mínimo é 5 minutos"),
+});
+
+export function Home() {
+  const { register, handleSubmit, watch } = useForm({
+    resolver: zodResolver(newCicleFormValidationSchema),
+    defaultValues: {
+      task: "",
+      minutesAmount: 0,
+    },
+  });
+
+  function handleCreateNewCicle(data: NewCicleFormData) {
     console.log(data);
   }
 
