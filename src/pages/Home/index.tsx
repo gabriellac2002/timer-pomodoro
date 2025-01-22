@@ -12,6 +12,8 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as zod from "zod";
+import { useState } from "react";
+import { Cycle } from "../../@types/types";
 
 // controled form -> quando o usuario digita algo, o valor é armazenado no estado em tempo real
 // uncontroled form -> quando o usuario digita algo, o valor é armazenado no estado apenas quando o formulario é submetido
@@ -37,14 +39,16 @@ import * as zod from "zod";
  */
 
 type NewCicleFormData = zod.infer<typeof newCicleFormValidationSchema>;
-
 const newCicleFormValidationSchema = zod.object({
   task: zod.string().nonempty("Digite um nome para o projeto"),
   minutesAmount: zod.number().int().min(5, "O tempo mínimo é 5 minutos"),
 });
 
 export function Home() {
-  const { register, handleSubmit, watch } = useForm({
+  const [cycles, setCycles] = useState<Cycle[]>([]);
+  const [activeCycleId, serActiveCycleId] = useState<string | null>(null);
+
+  const { register, handleSubmit, watch, reset } = useForm({
     resolver: zodResolver(newCicleFormValidationSchema),
     defaultValues: {
       task: "",
@@ -53,8 +57,20 @@ export function Home() {
   });
 
   function handleCreateNewCicle(data: NewCicleFormData) {
-    console.log(data);
+    const newCycle: Cycle = {
+      id: String(new Date().getTime()),
+      task: data.task,
+      minutesAmount: data.minutesAmount,
+    };
+
+    setCycles((state) => [...state, newCycle]);
+    serActiveCycleId(newCycle.id);
+    reset();
   }
+
+  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId);
+
+  console.log(activeCycle);
 
   const task = watch("task");
   const isSubmitDisabled = !task;
