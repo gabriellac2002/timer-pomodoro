@@ -6,4 +6,5 @@ export type Cycle = {
   minutesAmount: number;
   startDate: Date;
   interuptedAt?: Date;
+  finishedAt?: Date;
 };
